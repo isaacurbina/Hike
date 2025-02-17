@@ -8,12 +8,35 @@
 import SwiftUI
 
 struct CardView: View {
+	
+	// MARK: - properties
+	
+	@State private var imageNumber: Int = 1
+	@State private var randomNumber: Int = 1
+
+	// MARK: - functions
+	
+	func randomImage() {
+		print("--- BUTTON WAS PRESSED")
+		print("Status: Old Image Number = \(imageNumber)")
+		
+		repeat {
+			randomNumber = Int.random(in: 1...5)
+			print("Action: Random Number Generated = \(randomNumber)")
+			
+		} while randomNumber == imageNumber
+		imageNumber = randomNumber
+		
+		print("Result: New Image Number = \(imageNumber)\n")
+	}
+	
     var body: some View {
 		ZStack {
 			CustomBackgroundView()
 			
-			VStack(alignment: .leading) {
+			VStack {
 				// MARK: - header
+				
 				VStack(alignment: .leading) {
 					HStack {
 						Text("Hiking")
@@ -54,20 +77,44 @@ struct CardView: View {
 						.fill(
 							LinearGradient(
 								colors: [
-									Color(.colorIndigoMedium),
-									Color(.colorSalmonLight)
+									.colorIndigoMedium,
+									.colorSalmonLight
 								],
 								startPoint: .topLeading,
-								endPoint: UnitPoint.bottomTrailing
+								endPoint: .bottomTrailing
 							)
 						)
 						.frame(width: 256, height: 256)
-					Image("image-1")
+					Image("image-\(imageNumber)")
 						.resizable()
 						.scaledToFit()
+						.animation(.default, value: imageNumber)
 				}
 				
 				// MARK: - footer
+				
+				Button {
+					// ACTION: Generate a random number
+					print("The button was pressed.")
+					randomImage()
+					
+				} label: {
+					Text("Explore More")
+				}
+				.tint(.indigo)
+				.font(.title2)
+				.fontWeight(.heavy)
+				.foregroundStyle(
+					LinearGradient(
+						colors: [
+							.customGreenLight,
+							.customGreenMedium
+						],
+						startPoint: .top,
+						endPoint: .bottom
+					)
+				)
+				.buttonStyle(GradientButton())
 			}
 		}
 		.frame(width: 320, height: 570)
